@@ -440,7 +440,7 @@ module Neography
       def evaluate_response(response)
         code = response.code
         body = response.body
-        case code 
+        result = case code
           when 200 
             @logger.debug "OK" if @log_enabled
             response.parsed_response
@@ -460,6 +460,13 @@ module Neography
             @logger.error "Node could not be deleted (still has relationships?)" if @log_enabled
             nil
         end
+        if result
+          class << result
+            attr_accessor :hack_httparty_response
+          end
+          result.hack_httparty_response = response
+        end
+        result
       end
 
        def get(path,options={})
