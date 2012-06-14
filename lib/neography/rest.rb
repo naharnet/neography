@@ -369,7 +369,7 @@ module Neography
 
       def execute_query(query, params = {})
           options = { :body => {:query => query, :params => params}.to_json, :headers => {'Content-Type' => 'application/json'} }
-          result = post(@cypher_path, options)
+          result = evaluate_response(HTTParty.post(configuration + URI.encode(@cypher_path), options.merge!(@authentication)))
       end
       
       def execute_script(script, params = {})
